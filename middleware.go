@@ -387,7 +387,9 @@ func (p *Prometheus) HandlerFunc() gin.HandlerFunc {
 }
 
 func prometheusHandler() gin.HandlerFunc {
-	h := promhttp.Handler()
+	h := promhttp.HandlerFor(prometheus.DefaultGatherer, promhttp.HandlerOpts{
+		EnableOpenMetrics: true,
+	})
 	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)
 	}
